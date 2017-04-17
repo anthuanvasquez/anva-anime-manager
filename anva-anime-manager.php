@@ -19,4 +19,4 @@ define ( 'ANVA_ANIME_MANAGER_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define ( 'ANVA_ANIME_MANAGER_PLUGIN_URI', plugin_dir_url( __FILE__ ) );
 
 // Load dependencies
-require_once( ANVA_CUSTOM_LOGIN_PLUGIN_DIR . '/includes/general.php' );
+require_once( ANVA_ANIME_MANAGER_PLUGIN_DIR . '/includes/general.php' );

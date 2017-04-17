@@ -105,7 +105,7 @@ add_action( 'restrict_manage_posts', 'anime_admin_episodes_filter_restrict_manag
  * @param  $query The wp_query object
  * @return Void
  */
-function wpse45436_posts_filter( $query ) {
+function anime_admin_episodes_filter( $query ) {
     global $pagenow;
     $type = 'anime_episode';
     
@@ -118,4 +118,31 @@ function wpse45436_posts_filter( $query ) {
         $query->query_vars['meta_value'] = $_GET['anime_filter'];
     }
 }
-add_filter( 'parse_query', 'wpse45436_posts_filter' );
+add_filter( 'parse_query', 'anime_admin_episodes_filter' );
+
+
+function anime_post_type_link_filter( $post_link, $id = 0, $leavename = FALSE ) {
+    if ( strpos('%anime%', $post_link ) === 'FALSE' ) {
+        return $post_link;
+    }
+
+    $post = get_post( $id );
+    
+    if ( ! is_object( $post ) || $post->post_type != 'anime_episode' ) {
+        return $post_link;
+    }
+
+    $episode_id = $post->ID;
+    $anime_id = get_post_meta( $post->ID, '_anime', true );
+    $anime    = get_post( $anime_id );
+    
+    if ( ! $anime_id ) {
+        $episode_slug = apply_filters( 'anva_anime_episode_slug', '%anime%/episode' );
+        return str_replace( $episode_slug, '', $post_link );
+    }
+
+    $anime_slug = $anime->post_name;
+
+    return str_replace( '%anime%', $anime_slug, $post_link );
+}
+add_filter( 'post_type_link', 'anime_post_type_link_filter', 1, 3 );
